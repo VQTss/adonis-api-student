@@ -33,6 +33,27 @@ class UserController {
         }
     }
 
+    async login ({ request, response }) {
+        try {
+            const users=  await Database.table('users').where('username', request.body.username).first();
+            if (users) {
+                if (users.password === request.body.password) {
+                    return {
+                        users: users,
+                        message: 'Login success',
+                        status: 200
+                    };
+                }
+            }
+            return {
+                message: 'User not found',
+                status: 404
+            }
+        } catch (error) {
+            return error;
+        }
+    }
+
 }
 
 module.exports = UserController
